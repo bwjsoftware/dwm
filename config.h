@@ -104,7 +104,9 @@ static const Key keys[] = {
 	{ MODKEY, 						XK_l, 					 spawn, 		 SHCMD("slock") },
 	{ MODKEY|ShiftMask, 			XK_l, 					 spawn, 		 SHCMD("slock systemctl suspend") },
 	{ MODKEY,						XK_s,					 spawn,			 SHCMD("flameshot gui") },
-	{ MODKEY,						XK_f,					 spawn,			 SHCMD("thunar") },
+
+	{ MODKEY|Mod1Mask,				XK_f,					 spawn,			 SHCMD("thunar") },
+	{ MODKEY|Mod1Mask,				XK_t,					 spawn,			 SHCMD("thunderbird") },
 
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
