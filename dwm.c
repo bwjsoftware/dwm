@@ -44,6 +44,9 @@
 #include "drw.h"
 #include "util.h"
 
+/* Manually Added Headers */
+#include <X11/XF86keysym.h>
+
 /* macros */
 #define BUTTONMASK              (ButtonPressMask|ButtonReleaseMask)
 #define CLEANMASK(mask)         (mask & ~(numlockmask|LockMask) & (ShiftMask|ControlMask|Mod1Mask|Mod2Mask|Mod3Mask|Mod4Mask|Mod5Mask))

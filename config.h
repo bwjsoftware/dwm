@@ -67,7 +67,7 @@ static const char *spanishkeyboard[] = {"/usr/bin/setxkbmap", "es", NULL };
 static const char *chrome[] = {"google-chrome", NULL };
 
 static const Key keys[] = {
-	/* modifier                     key        function        argument */
+	/* modifier                     key						 function        argument */
 	{ MODKEY,                       XK_x,                    spawn,          {.v = dmenucmd } },
 	{ MODKEY,                       XK_Return,               spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_b,                    togglebar,      {0} },
