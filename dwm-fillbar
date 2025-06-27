@@ -24,26 +24,35 @@ getKB()
 
 getVPN()
 {
-	VPN=$(nmcli -a | grep 'VPN connection' | sed -e 's/\( VPN connection\)*$//g')
-	if [ "$VPN" != "" ]; then
-		echo " VPN: $VPN |"
+	VPN=$(nmcli -t | grep 'VPN connection' | awk 'NR==1{print $1}')
+	if ! [[ -z $VPN ]]; then
+		echo "VPN: $VPN"
+	else
+		VPN=$(nmcli -t | grep 'wg0' | awk 'NR==1{print $4}')
+		if ! [[ -z $VPN ]]; then
+			echo "VPN: $VPN"
+		fi
 	fi
 }
 
 getNetwork()
 {
-	CONNAME=$(nmcli -t | grep 'Wired Connection' | awk '{print $1}')
-	if [ "$CONNAME" = "" ]; then
-		CONNAME=$(nmcli -t -f active,ssid dev wifi | grep '^yes' | cut -c 5-)
-		if [ "$CONNAME" = "" ]; then
-			echo "Offline"
+	ETH_CONNAME=$(nmcli -t -f NAME,TYPE connection show --active | grep 'ethernet' | cut -d ":" -f1)
+	WIFI_CONNAME=$(nmcli -t -f active,ssid dev wifi | grep 'yes' | cut -d ":" -f2)
+	OPENVPN=$(nmcli -t -f NAME,TYPE connection show --active | grep 'vpn' | cut -d ":" -f1)
+	WGVPN=$(nmcli -t -f NAME,TYPE connection show --active | grep 'wireguard' | cut -d ":" -f1)
+	if [ -n "$ETH_CONNAME" ] || [ -n "$WIFI_CONNAME" ]; then
+		if [ -n "$OPENVPN" ]; then
+			echo "VPN: $OPENVPN"
+		elif [ -n "$WGVPN" ]; then
+			echo "VPN: $WGVPN"
+		elif [ -n "$ETH_CONNAME" ]; then
+			echo "$ETH_CONNAME"
 		else
-			IP=$(nmcli -a | grep 'inet4' | awk 'NR==1{print $2}' | cut -d '/' -f 1)
-			echo "Wifi: $CONNAME"
+			echo "Wifi: $WIFI_CONNAME"
 		fi
 	else
-		IP=$(nmcli -a | grep 'inet4' | awk 'NR==1{print $2}' | cut -d '/' -f 1)
-		echo "$CONNAME"
+		echo "Offline"
 	fi
 }
 
@@ -86,8 +95,13 @@ parallelize()
 }
 #parallelize &
 
+buildString()
+{
+	echo " $(getKB) | $(getAudio) | $(getRAM) | $(getBattery) | $(getBrightness) | $(getNetwork) | $(getDate)"
+}
+
 while true
 do
-	xsetroot -name " $(getKB) | $(getAudio) | $(getRAM) | $(getBattery) | $(getBrightness) |$(getVPN) $(getNetwork) | $(getDate)"
+	xsetroot -name "$(buildString)"
 	sleep 0.5
 done

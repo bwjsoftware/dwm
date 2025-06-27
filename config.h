@@ -29,6 +29,8 @@ static const Rule rules[] = {
 	/* class      instance    title       tags mask     isfloating   monitor */
 	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
 	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+	{ "Soffice",  "soffice",  NULL,	  	  0,			0,			 0 },
+	{ "Soffice",  "soffice",  "Presenting: ", 0, 		0,			 1 },
 };
 
 /* layout(s) */
@@ -82,9 +84,9 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_Up,                   zoom,           {0} },
 	{ MODKEY,                       XK_Tab,                  view,           {0} },
 	{ MODKEY,                       XK_q,                    killclient,     {0} },
-	{ MODKEY,                       XK_t,                    setlayout,      {.v = &layouts[0]} },
-	{ MODKEY,                       XK_f,                    setlayout,      {.v = &layouts[1]} },
-	{ MODKEY,                       XK_m,                    setlayout,      {.v = &layouts[2]} },
+	{ MODKEY|ShiftMask,             XK_t,                    setlayout,      {.v = &layouts[0]} },
+	{ MODKEY|ShiftMask,             XK_f,                    setlayout,      {.v = &layouts[1]} },
+	{ MODKEY|ShiftMask,             XK_m,                    setlayout,      {.v = &layouts[2]} },
 	{ MODKEY,                       XK_space,                setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,                togglefloating, {0} },
 	{ MODKEY,                       XK_0,                    view,           {.ui = ~0 } },
@@ -95,7 +97,8 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_Right,                tagmon,         {.i = +1 } },
 	{ MODKEY|ControlMask|ShiftMask, XK_u,                    spawn,          {.v = uskeyboard } },
 	{ MODKEY|ControlMask|ShiftMask, XK_s,                    spawn,          {.v = spanishkeyboard } },
-	{ MODKEY|Mod1Mask,              XK_c,                    spawn,          {.v = chrome } },
+	{ MODKEY|Mod1Mask,              XK_c,                    spawn,          SHCMD("brave") },
+	{ MODKEY|Mod1Mask|ControlMask,	XK_c,					 spawn,			 SHCMD("brave --tor") },
 
 	{0,                             XF86XK_AudioRaiseVolume, spawn,          {.v = upvol } },
 	{0,                             XF86XK_AudioLowerVolume, spawn,          {.v = downvol } },
@@ -107,6 +110,10 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_r,                    spawn,          SHCMD("systemctl reboot") },
 	{ MODKEY, 						XK_l, 					 spawn, 		 SHCMD("slock") },
 	{ MODKEY|ShiftMask,				XK_l, 					 spawn, 		 SHCMD("slock systemctl suspend") },
+
+	{ MODKEY|Mod1Mask, 				XK_f,					 spawn, 		 SHCMD("dolphin") },
+	{ MODKEY,						XK_s,					 spawn,			 SHCMD("spectacle") },
+	{ MODKEY, 						XK_t,					 spawn,			 SHCMD("thunderbird") },
 
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
