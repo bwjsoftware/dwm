@@ -62,8 +62,6 @@ static const char *termcmd[]  = { "kitty", NULL };
 static const char *upvol[] = {"/usr/bin/pactl", "set-sink-volume", "@DEFAULT_SINK@", "+5%", NULL};
 static const char *downvol[] = {"/usr/bin/pactl", "set-sink-volume", "@DEFAULT_SINK@", "-5%", NULL};
 static const char *mutevol[] = {"/usr/bin/pactl", "set-sink-mute", "@DEFAULT_SINK@", "toggle", NULL};
-static const char *uskeyboard[] = {"/usr/bin/setxkbmap", "us", NULL };
-static const char *spanishkeyboard[] = {"/usr/bin/setxkbmap", "es", NULL };
 static const char *chrome[] = {"google-chrome", NULL };
 
 static const Key keys[] = {
@@ -91,9 +89,8 @@ static const Key keys[] = {
 	{ MODKEY|Mod1Mask,              XK_Right,                focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_Left,                 tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_Right,                tagmon,         {.i = +1 } },
-	{ MODKEY|ControlMask|ShiftMask, XK_u,                    spawn,          {.v = uskeyboard } },
-	{ MODKEY|ControlMask|ShiftMask, XK_s,                    spawn,          {.v = spanishkeyboard } },
-	{ MODKEY|Mod1Mask,              XK_c,                    spawn,          {.v = chrome } },
+	{ MODKEY|Mod1Mask,              XK_c,                    spawn,          SHCMD("brave") },
+	{ MODKEY|Mod1Mask|ControlMask,	XK_c,					 spawn,			 SHCMD("brave --tor") },
 
 	{0,                             XF86XK_AudioRaiseVolume, spawn,          {.v = upvol } },
 	{0,                             XF86XK_AudioLowerVolume, spawn,          {.v = downvol } },
@@ -101,12 +98,17 @@ static const Key keys[] = {
 
 	{ MODKEY|ShiftMask,             XK_s,                    spawn,          SHCMD("systemctl poweroff") },
 	{ MODKEY|ShiftMask,             XK_r,                    spawn,          SHCMD("systemctl reboot") },
-	{ MODKEY, 						XK_l, 					 spawn, 		 SHCMD("slock") },
-	{ MODKEY|ShiftMask, 			XK_l, 					 spawn, 		 SHCMD("slock systemctl suspend") },
+	{ MODKEY, 						XK_l, 					 spawn, 		 SHCMD("dwm-lock") },
+	{ MODKEY|ShiftMask, 			XK_l, 					 spawn, 		 SHCMD("dwm-lock systemctl suspend") },
 	{ MODKEY,						XK_s,					 spawn,			 SHCMD("flameshot gui") },
 
 	{ MODKEY|Mod1Mask,				XK_f,					 spawn,			 SHCMD("thunar") },
 	{ MODKEY|Mod1Mask,				XK_t,					 spawn,			 SHCMD("thunderbird") },
+
+	{ MODKEY|ControlMask|ShiftMask, XK_e,					 spawn,			 SHCMD("xkb-switch -s us") },
+	{ MODKEY|ControlMask|ShiftMask, XK_s,					 spawn,			 SHCMD("xkb-switch -s es") },
+	{ MODKEY|ControlMask|ShiftMask, XK_w,					 spawn,			 SHCMD("xkb-switch -s se") },
+	{ MODKEY|ControlMask|ShiftMask, XK_g,					 spawn,			 SHCMD("xkb-switch -s gr") },
 
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
