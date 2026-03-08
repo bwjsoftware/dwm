@@ -19,7 +19,8 @@ getAudio()
 
 getKB()
 {
-	echo "$(setxkbmap -query | awk '/layout/{print $2}')"
+	#echo "$(setxkbmap -query | awk '/layout/{print $2}')"
+	echo "$(xkb-switch -p)"
 }
 
 getVPN()
@@ -32,15 +33,17 @@ getVPN()
 
 getNetwork()
 {
-	CONNAME=$(nmcli -t | grep 'Wired Connection' | awk '{print $1}')
-	if [ "$CONNAME" = "" ]; then
-		CONNAME=$(nmcli -t -f active,ssid dev wifi | grep '^yes' | cut -c 5-)
-		if [ "$CONNAME" = "" ]; then
-			echo "Offline | "
-		else
-			IP=$(nmcli -a | grep 'inet4' | awk 'NR==1{print $2}' | cut -d '/' -f 1)
-			echo "Wifi: $CONNAME"
+	CONNAME=$(nmcli -t -f NAME,TYPE connection show --active | grep ethernet | cut -d ":" -f1)
+	OPENVPN=$(nmcli -t -f NAME,TYPE connection show --active | grep 'vpn' | cut -d ":" -f1)
+	WGVPN=$(nmcli -t -f NAME,TYPE connection show --active | grep 'wireguard' | cut -d ":" -f1)
+	if [ -n "$CONNAME" ]; then
+		if [ -n "$OPENVPN" ]; then
+			echo "VPN: $OPENVPN | "
+		elif [ -n "$WGVPN" ]; then
+			echo "VPN: $WGVPN | "
 		fi
+	else
+		echo "Offline | "
 	fi
 }
 
@@ -85,6 +88,6 @@ parallelize()
 
 while true
 do
-	xsetroot -name " $(getKB) | $(getAudio) | $(getRAM) |$(getVPN) $(getNetwork)$(getDate)"
+	xsetroot -name " $(getKB) | $(getAudio) | $(getRAM) | $(getNetwork)$(getDate)"
 	sleep 0.5
 done
